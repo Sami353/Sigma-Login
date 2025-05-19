@@ -15,7 +15,8 @@ public class LoginPage {
     private By usernameField = By.id("username");
     private By passwordField = By.id("password1");
     private By loginButton = By.id("signIn");
-    private By errorMsg = By.cssSelector("div.p-toast-detail");
+//    private By errorMsg = By.cssSelector("div.p-toast-detail");
+    private By errorMsg = By.xpath("//span[@class='p-toast-summary'][@data-pc-section='summary']");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
