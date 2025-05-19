@@ -16,13 +16,10 @@ public class LoginPage {
     private By usernameField = By.id("username");
     private By passwordField = By.id("password1");
     private By loginButton = By.id("signIn");
-//    private By errorMsg = By.cssSelector("div.p-toast-detail");
     private By errorMsg = By.xpath("//span[@class='p-toast-summary'][@data-pc-section='summary']");
-//    private By usernameAlert = By.xpath(("//span[@id='usernameHelp'])[1]");
-//    private By passwordAlert = By.xpath(("(//span[@id='password1Help'])[1]");
     private By usernameAlert = By.cssSelector("#usernameHelp");
     private By passwordAlert = By.cssSelector("#password1Help");
-    
+
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -49,7 +46,7 @@ public class LoginPage {
             return "Error message not found";
         }
     }
-    
+
     public String getAlertMessage() {
         try {
             // First try to find username field alert
@@ -65,9 +62,17 @@ public class LoginPage {
         }
         return null;
     }
+    
+    public void leaveUsernameEmpty() {
+        driver.findElement(usernameField).clear();
+    }
+    
+    public void leavePasswordEmpty() {
+        driver.findElement(passwordField).clear();
+    }
 
     public boolean isLoginPage() {
-        return wait.until(ExpectedConditions.urlContains("login")) || 
-               driver.getCurrentUrl().equals("http://localhost:7073/");
+        return wait.until(ExpectedConditions.urlContains("login"))
+                || driver.getCurrentUrl().equals("http://localhost:7073/");
     }
 }
