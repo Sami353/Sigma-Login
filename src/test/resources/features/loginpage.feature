@@ -8,7 +8,7 @@ Feature: Login Functionality for Sigma Website
     When I click on the login button
     Then I should be logged in successfully
 
-  Scenario Outline: Unsuccessful login with invalid or empty credentials
+  Scenario Outline: Unsuccessful login with invalid credentials
     Given I enter username "<username>" and password "<password>"
     When I click on the login button
     Then I should see error message "<error_message>"
@@ -17,5 +17,13 @@ Feature: Login Functionality for Sigma Website
       | username | password   | error_message                     |
       | xkajddd  | sigma@123  | Invalid UserName or Password !!!  |
       | robin    | sd000ss    | Invalid UserName or Password !!!  |
-      |          |            | Username and Password required    |
 
+  Scenario Outline: Unsuccessful login with empty credentials
+    Given I enter username "<username>" and password "<password>"
+    When I click on the login button
+    Then I should see alert "<error_message>"
+
+    Examples:
+      | username | password   | error_message                     |
+      |          | sigma@123  | Username is required !            |
+      | robin    |            | Password is required !            |

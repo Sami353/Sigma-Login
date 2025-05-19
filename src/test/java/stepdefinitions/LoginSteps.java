@@ -45,4 +45,11 @@ public class LoginSteps {
         assertTrue("Expected error message: " + expectedMessage + " but got: " + actualMessage, 
                   actualMessage.contains(expectedMessage));
     }
+    
+    @Then("I should see alert {string}")
+    public void i_should_see_alert(String expectedMessage) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        String alertMessage = loginPage.getAlertMessage();
+        assertEquals(expectedMessage, alertMessage);
+    }
 }
