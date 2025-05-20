@@ -32,14 +32,14 @@ Feature: Login Validation Tests
     Then I should see toast error message
 
   @positive
-  Scenario: Login with valid credentials - no click first
+  Scenario: Login with valid credentials - password first
     When I enter valid password
     And I enter valid username
     And I click login button
     Then I should see dashboard page
 
   @negative
-  Scenario: Login with invalid credentials - no click first
+  Scenario: Login with invalid credentials - password first
     When I enter invalid password
     And I enter invalid username
     And I click login button
@@ -58,3 +58,14 @@ Feature: Login Validation Tests
     And I leave username empty
     And I click login button
     Then I should see field alert message
+
+  @validation
+  Scenario: Login with empty credentials then successful login
+    When I click login button without entering credentials
+    Then I should see field alert message for username field
+    Then I should see field alert message for password field
+    When I enter valid username
+    And I enter valid password
+    And I click login button
+    Then I should see dashboard page
+

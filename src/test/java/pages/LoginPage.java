@@ -24,15 +24,13 @@ public class LoginPage {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
-
+        
     public void enterUsername(String username) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).clear();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys(username);
+        clearAndEnterText(usernameField, username);
     }
 
     public void enterPassword(String password) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).clear();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys(password);
+        clearAndEnterText(passwordField, password);
     }
 
     public void clickLogin() {
@@ -63,6 +61,14 @@ public class LoginPage {
         return null;
     }
     
+    public String getUsernameAlert() {
+        return getElementText(usernameAlert, null);
+    }
+
+    public String getPasswordAlert() {
+        return getElementText(passwordAlert, null);
+    }
+    
     public void leaveUsernameEmpty() {
         driver.findElement(usernameField).clear();
     }
@@ -74,5 +80,18 @@ public class LoginPage {
     public boolean isLoginPage() {
         return wait.until(ExpectedConditions.urlContains("login"))
                 || driver.getCurrentUrl().equals("http://localhost:7073/");
+    }
+    
+    private void clearAndEnterText(By locator, String text) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).clear();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).sendKeys(text);
+    }
+
+    private String getElementText(By locator, String defaultValue) {
+        try {
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).getText().trim();
+        } catch (Exception e) {
+            return defaultValue;
+        }
     }
 }
