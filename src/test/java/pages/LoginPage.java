@@ -16,26 +16,21 @@ public class LoginPage {
     private By usernameField = By.id("username");
     private By passwordField = By.id("password1");
     private By loginButton = By.id("signIn");
-//    private By errorMsg = By.cssSelector("div.p-toast-detail");
     private By errorMsg = By.xpath("//span[@class='p-toast-summary'][@data-pc-section='summary']");
-//    private By usernameAlert = By.xpath(("//span[@id='usernameHelp'])[1]");
-//    private By passwordAlert = By.xpath(("(//span[@id='password1Help'])[1]");
     private By usernameAlert = By.cssSelector("#usernameHelp");
     private By passwordAlert = By.cssSelector("#password1Help");
-    
+
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
-
+        
     public void enterUsername(String username) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).clear();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys(username);
+        clearAndEnterText(usernameField, username);
     }
 
     public void enterPassword(String password) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).clear();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys(password);
+        clearAndEnterText(passwordField, password);
     }
 
     public void clickLogin() {
@@ -49,7 +44,7 @@ public class LoginPage {
             return "Error message not found";
         }
     }
-    
+
     public String getAlertMessage() {
         try {
             // First try to find username field alert
@@ -65,9 +60,38 @@ public class LoginPage {
         }
         return null;
     }
+    
+    public String getUsernameAlert() {
+        return getElementText(usernameAlert, null);
+    }
+
+    public String getPasswordAlert() {
+        return getElementText(passwordAlert, null);
+    }
+    
+    public void leaveUsernameEmpty() {
+        driver.findElement(usernameField).clear();
+    }
+    
+    public void leavePasswordEmpty() {
+        driver.findElement(passwordField).clear();
+    }
 
     public boolean isLoginPage() {
-        return wait.until(ExpectedConditions.urlContains("login")) || 
-               driver.getCurrentUrl().equals("http://localhost:7073/");
+        return wait.until(ExpectedConditions.urlContains("login"))
+                || driver.getCurrentUrl().equals("http://localhost:7073/");
+    }
+    
+    private void clearAndEnterText(By locator, String text) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).clear();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).sendKeys(text);
+    }
+
+    private String getElementText(By locator, String defaultValue) {
+        try {
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).getText().trim();
+        } catch (Exception e) {
+            return defaultValue;
+        }
     }
 }
